@@ -13,4 +13,3 @@ class DB:
 
     def insert_one(self, item):
         self.posts.insert_one(item)
-        print(item)
