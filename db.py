@@ -1,6 +1,5 @@
 from config import Config
 import pymongo
-import spiders.weibo as spiders
 
 
 class DB:

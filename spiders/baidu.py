@@ -2,6 +2,7 @@ from datetime import datetime
 import requests
 import pytz
 from bs4 import BeautifulSoup
+import logging
 
 
 def fetch_hotsearch():
@@ -22,14 +23,15 @@ def fetch_hotsearch():
             content = ""
         try:
             item = {
-                'content': "#%s# %s" % (title, content.replace(" 查看更多> ", "")),
+                'content': "#%s# %s" % (title.replace("#", ""), content.replace(" 查看更多> ", "")),
                 'link': link,
                 'tag': 'hotsearch',
                 'userName': 'baidu',
                 'date': datetime.now(pytz.timezone('Asia/Shanghai'))
             }
             res.append(item)
-        except:
+        except Exception as error:
+            logging.error(error)
             continue
     return res
 

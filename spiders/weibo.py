@@ -2,7 +2,7 @@ from datetime import datetime
 import requests
 import re
 import pytz
-
+import logging
 
 def fetch_hotsearch(cookie):
     url = "https://weibo.com/ajax/statuses/hot_band"
@@ -23,7 +23,8 @@ def fetch_hotsearch(cookie):
                 'date': datetime.now(pytz.timezone('Asia/Shanghai'))
             }
             hot_searches.append(item)
-        except:
+        except Exception as error:
+            logging.error(error)
             continue
 
     return hot_searches
