@@ -3,6 +3,7 @@ import requests
 import pytz
 from bs4 import BeautifulSoup
 import logging
+import jieba
 
 
 def fetch_hotsearch():
@@ -18,16 +19,18 @@ def fetch_hotsearch():
         link_element = title_element.parent
         link = link_element.get('href')
         content_element = link_element.parent.find_all("div")[2]
-        content = content_element.get_text()
+        content = "#%s# %s" % (title.replace(
+            "#", ""), content_element.get_text().replace(" 查看更多> ", ""))
         if not content:
             content = ""
         try:
             item = {
-                'content': "#%s# %s" % (title.replace("#", ""), content.replace(" 查看更多> ", "")),
+                'content': content,
                 'link': link,
                 'tag': 'hotsearch',
                 'userName': 'baidu',
-                'date': datetime.now(pytz.timezone('Asia/Shanghai'))
+                'date': datetime.now(pytz.timezone('Asia/Shanghai')),
+                'keywords': " ".join(jieba.cut(content))
             }
             res.append(item)
         except Exception as error:

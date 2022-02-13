@@ -20,6 +20,12 @@ class Updater:
         if not os.path.exists(self.log_base_path):
             os.makedirs(self.log_base_path)
         self.update_log_config()
+    
+    def run(self):
+        self.update_log_config()
+        self.update_baidu_hotsearch()
+        self.update_weibo_hotsearch()
+        Timer(self.interval, self.run).start()
         
     def update_log_config(self):
         filename = self.log_base_path + "/" + datetime.now().strftime("%Y-%m-%d") + ".log"
@@ -33,7 +39,6 @@ class Updater:
                 continue
             self.db.insert_one(item)
             logging.info(item)
-        Timer(self.interval, self.update_weibo_hotsearch).start()
 
     def update_baidu_hotsearch(self):
         logging.info("Update baidu hot search at: " + str(datetime.now()))
@@ -43,13 +48,11 @@ class Updater:
                 continue
             self.db.insert_one(item)
             logging.info(item)
-        Timer(self.interval, self.update_baidu_hotsearch).start()
 
 
 def main():
     updater = Updater()
-    updater.update_weibo_hotsearch()
-    updater.update_baidu_hotsearch()
+    updater.run()
 
 
 if __name__ == "__main__":
