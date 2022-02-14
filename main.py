@@ -33,21 +33,29 @@ class Updater:
 
     def update_weibo_hotsearch(self):
         logging.info("Update weibo hot search at: " + str(datetime.now()))
-        hot_searches = weibo.fetch_hotsearch(Config.weibo_cookie)
-        for item in hot_searches:
-            if self.db.find_one(item):
-                continue
-            self.db.insert_one(item)
-            logging.info(item)
+        try:
+            hot_searches = weibo.fetch_hotsearch(Config.weibo_cookie)
+            for item in hot_searches:
+                if self.db.find_one(item):
+                    continue
+                self.db.insert_one(item)
+                logging.info(item)
+        except Exception as e:
+            logging.error(e)
+        
+        
 
     def update_baidu_hotsearch(self):
         logging.info("Update baidu hot search at: " + str(datetime.now()))
-        hot_searches = baidu.fetch_hotsearch()
-        for item in hot_searches:
-            if self.db.find_one(item):
-                continue
-            self.db.insert_one(item)
-            logging.info(item)
+        try:
+            hot_searches = baidu.fetch_hotsearch()
+        except Exception as e:
+            logging.error(e)
+            for item in hot_searches:
+                if self.db.find_one(item):
+                    continue
+                self.db.insert_one(item)
+                logging.info(item)
 
 
 def main():
