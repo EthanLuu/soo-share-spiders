@@ -1,9 +1,6 @@
-from datetime import datetime
 import requests
-import pytz
 from bs4 import BeautifulSoup
 import logging
-import jieba
 
 
 def fetch_hotsearch():
@@ -29,8 +26,6 @@ def fetch_hotsearch():
                 'link': link,
                 'tag': 'hotsearch',
                 'userName': 'baidu',
-                'date': datetime.now(pytz.timezone('Asia/Shanghai')),
-                'keywords': " ".join(jieba.cut(content))
             }
             res.append(item)
         except Exception as error:
