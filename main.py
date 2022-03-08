@@ -29,7 +29,6 @@ class Updater:
         self.update_baidu_hotsearch()
         self.update_weibo_hotsearch()
         self.update_sakir_competition()
-        Timer(self.interval, self.run).start()
 
     def add_date_and_keywords(self, item):
         item['date'] = datetime.now(pytz.timezone('Asia/Shanghai')),
@@ -42,10 +41,9 @@ class Updater:
         logging.basicConfig(filename=filename,
                             encoding='utf-8', level=logging.INFO)
 
-    def update_sakir_competition(self):
-        logging.info("Update sakir hot search at: " + str(datetime.now()))
+    def fetch_and_insert(self, fetch):
         try:
-            items = sakir.fetch_competitions()
+            items = fetch()
             for item in items:
                 if self.db.find_one(item):
                     continue
@@ -54,32 +52,22 @@ class Updater:
                 logging.info(item)
         except Exception as e:
             logging.error(e)
+        
+
+    def update_sakir_competition(self):
+        logging.info("Update sakir hot search at: " + str(datetime.now()))
+        self.fetch_and_insert(sakir.fetch_competitions)
 
     def update_weibo_hotsearch(self):
         logging.info("Update weibo hot search at: " + str(datetime.now()))
-        try:
-            hot_searches = weibo.fetch_hotsearch(Config.weibo_cookie)
-            for item in hot_searches:
-                if self.db.find_one(item):
-                    continue
-                item = self.add_date_and_keywords(item)
-                self.db.insert_one(item)
-                logging.info(item)
-        except Exception as e:
-            logging.error(e)
+        func = lambda: weibo.fetch_hotsearch(Config.weibo_cookie)
+        self.fetch_and_insert(func)
+
 
     def update_baidu_hotsearch(self):
         logging.info("Update baidu hot search at: " + str(datetime.now()))
-        try:
-            hot_searches = baidu.fetch_hotsearch()
-        except Exception as e:
-            logging.error(e)
-            for item in hot_searches:
-                if self.db.find_one(item):
-                    continue
-                item = self.add_date_and_keywords(item)
-                self.db.insert_one(item)
-                logging.info(item)
+        self.fetch_and_insert(baidu.fetch_hotsearch)
+
 
 
 def main():

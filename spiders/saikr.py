@@ -7,7 +7,7 @@ def fetch_competitions():
     url = "https://m.saikr.com/vs/ajaxGetList"
     page = 1
     competitions = []
-    while page < 10:
+    for page in range(1, 11):
         try:
             response = requests.get(f'{url}?page={page}')
             if not response:
