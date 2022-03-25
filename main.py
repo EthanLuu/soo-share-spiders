@@ -6,6 +6,7 @@ from datetime import datetime
 import spiders.weibo as weibo
 import spiders.baidu as baidu
 import spiders.saikr as sakir
+import spiders.toutiao as toutiao
 import logging
 import jieba
 import pytz
@@ -29,6 +30,7 @@ class Updater:
         self.update_baidu_hotsearch()
         self.update_weibo_hotsearch()
         self.update_sakir_competition()
+        self.update_toutiao_hotsearch()
 
     def add_date_and_keywords(self, item):
         item['date'] = datetime.now(pytz.timezone('Asia/Shanghai')),
@@ -67,6 +69,10 @@ class Updater:
     def update_baidu_hotsearch(self):
         logging.info("Update baidu hot search at: " + str(datetime.now()))
         self.fetch_and_insert(baidu.fetch_hotsearch)
+    
+    def update_toutiao_hotsearch(self):
+        logging.info("Update toutiao hot search at: " + str(datetime.now()))
+        self.fetch_and_insert(toutiao.fetch_hotsearch)
 
 
 
