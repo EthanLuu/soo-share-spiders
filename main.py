@@ -47,7 +47,7 @@ class Updater:
         try:
             items = fetch()
             for item in items:
-                if self.db.find_one(item):
+                if self.db.exist_one(item):
                     continue
                 item = self.add_date_and_keywords(item)
                 self.db.insert_one(item)

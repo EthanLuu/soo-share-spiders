@@ -7,8 +7,8 @@ class DB:
     db = client['sooshare']
     posts = db['posts']
 
-    def find_one(self, item):
-        return self.posts.find_one({'link': item['link']})
+    def exist_one(self, item):
+        return self.posts.find_one({'link': item['link']}) or self.posts.find_one({'content': item['content']})
 
     def insert_one(self, item):
         self.posts.insert_one(item)
