@@ -18,10 +18,17 @@ def main():
     db = DB()
     posts = db.posts.find({})
     for post in posts:
-        if db.posts.count_documents({"content": post['content']}) == 1:
-            continue
-        db.posts.delete_many({"content": post['content']})
-        print(post['content'])
+        print(post['date'])
+        if type(post['date']) == type([]):
+            db.posts.find_one_and_update({"_id": post['_id']}, {
+                '$set': {
+                    "date": post['date'][0]
+                }
+            })
+
+        # break
+        # db.posts.update_one({"content": post['content']})
+        # print(post['content'])
 
 
 if __name__ == "__main__":

@@ -75,8 +75,7 @@ class Updater:
 
 def main():
     updater = Updater()
-    print(updater.add_date_and_keywords({"content": "123"}))
-    # updater.run()
+    updater.run()
 
 
 if __name__ == "__main__":
