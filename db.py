@@ -12,3 +12,17 @@ class DB:
 
     def insert_one(self, item):
         self.posts.insert_one(item)
+
+
+def main():
+    db = DB()
+    posts = db.posts.find({})
+    for post in posts:
+        if db.posts.count_documents({"content": post['content']}) == 1:
+            continue
+        db.posts.delete_many({"content": post['content']})
+        print(post['content'])
+
+
+if __name__ == "__main__":
+    main()

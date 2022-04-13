@@ -33,7 +33,7 @@ class Updater:
         self.update_toutiao_hotsearch()
 
     def add_date_and_keywords(self, item):
-        item['date'] = datetime.now(pytz.timezone('Asia/Shanghai')),
+        item['date'] = datetime.now(pytz.timezone('Asia/Shanghai'))
         item['keywords'] = " ".join(jieba.cut(item['content']))
         return item
 
@@ -54,7 +54,6 @@ class Updater:
                 logging.info(item)
         except Exception as e:
             logging.error(e)
-        
 
     def update_sakir_competition(self):
         logging.info("Update sakir hot search at: " + str(datetime.now()))
@@ -62,23 +61,22 @@ class Updater:
 
     def update_weibo_hotsearch(self):
         logging.info("Update weibo hot search at: " + str(datetime.now()))
-        func = lambda: weibo.fetch_hotsearch(Config.weibo_cookie)
+        def func(): return weibo.fetch_hotsearch(Config.weibo_cookie)
         self.fetch_and_insert(func)
-
 
     def update_baidu_hotsearch(self):
         logging.info("Update baidu hot search at: " + str(datetime.now()))
         self.fetch_and_insert(baidu.fetch_hotsearch)
-    
+
     def update_toutiao_hotsearch(self):
         logging.info("Update toutiao hot search at: " + str(datetime.now()))
         self.fetch_and_insert(toutiao.fetch_hotsearch)
 
 
-
 def main():
     updater = Updater()
-    updater.run()
+    print(updater.add_date_and_keywords({"content": "123"}))
+    # updater.run()
 
 
 if __name__ == "__main__":
