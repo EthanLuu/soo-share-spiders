@@ -12,7 +12,7 @@ def parse_date(s: str):
     return date
 
 
-def parse_elements(elements: list[bs4.ResultSet]):
+def parse_elements(elements: list):
     base_url = "https://uncareer.net"
     items = []
     for element in elements:

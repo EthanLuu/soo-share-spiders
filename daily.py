@@ -31,8 +31,7 @@ class Updater:
     def update_log_config(self):
         filename = self.log_base_path + "/" + \
             datetime.now().strftime("%Y-%m-%d") + ".log"
-        logging.basicConfig(filename=filename,
-                            encoding='utf-8', level=logging.INFO)
+        logging.basicConfig(filename=filename, level=logging.INFO)
 
     def fetch_and_insert(self, fetch):
         try:
