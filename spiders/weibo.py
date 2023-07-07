@@ -14,7 +14,7 @@ def fetch_hotsearch(cookie):
 
     for band in band_list:
         try:
-            content = pattern.sub('', band['mblog']['text'])
+            content = pattern.sub('', band['note'])
             link = "https://s.weibo.com/weibo?q=%23" + band['note'] + "%23"
             if "此微博已被删除" in content: continue
             item = {
@@ -29,3 +29,9 @@ def fetch_hotsearch(cookie):
             continue
 
     return hot_searches
+
+
+if __name__ == "__main__":
+    weibo_cookie = ""
+    items = fetch_hotsearch(weibo_cookie)
+    print(items)
