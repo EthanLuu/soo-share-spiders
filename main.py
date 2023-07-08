@@ -45,6 +45,8 @@ class Updater:
     def fetch_and_insert(self, fetch):
         try:
             items = fetch()
+            if not items or len(items) == 0:
+                return
             for item in items:
                 if self.db.exist_one(item):
                     continue

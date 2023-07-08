@@ -5,18 +5,18 @@ import pymongo
 class DB:
     client = pymongo.MongoClient(Config.mongo_url)
     db = client['sooshare']
-    posts = db['posts']
+    table = db['posts']
     def __init__(self, db_name='soo_share', table_name='posts') -> None:
         self.db = self.client[db_name]
-        self.posts = self.db[table_name]
+        self.table = self.db[table_name]
         pass
 
 
     def exist_one(self, item):
-        return self.posts.find_one({'link': item['link']}) or self.posts.find_one({'content': item['content']})
+        return self.table.find_one({'link': item['link']})
 
     def insert_one(self, item):
-        self.posts.insert_one(item)
+        self.table.insert_one(item)
 
 
 def main():

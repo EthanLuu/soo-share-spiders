@@ -10,7 +10,7 @@ def parse_date(s: str):
         return None
     date_string = matches[0]
     date_format = "%d %B %Y"
-    date = datetime.strptime(date_string, date_format).date()
+    date = datetime.strptime(date_string, date_format)
     return date
 
 
@@ -53,6 +53,8 @@ def fetch_all():
     page = 1
     items_all = []
     while True:
+        if page > 1:
+            break
         cur_url = f'{base_url}?page={page}'
         print(f'Fetching {cur_url}')
         html = read_page(url=cur_url)

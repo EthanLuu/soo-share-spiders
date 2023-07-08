@@ -1,15 +1,8 @@
-from config import Config
 from db import DB
 import os
 from datetime import datetime
-import spiders.weibo as weibo
-import spiders.baidu as baidu
-import spiders.saikr as sakir
-import spiders.toutiao as toutiao
 import spiders.un_intern as un
 import logging
-import jieba
-import pytz
 
 
 class Updater:
@@ -36,6 +29,8 @@ class Updater:
     def fetch_and_insert(self, fetch):
         try:
             items = fetch()
+            if not items or len(items) == 0:
+                return
             for item in items:
                 if self.db.exist_one(item):
                     continue
