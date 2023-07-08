@@ -22,6 +22,8 @@ def parse_elements(elements: list):
         title = element.find('a').text
         split_title = title.split(", ")
         desc = ", ".join(split_title[:-1])
+        if len(split_title) == 1:
+            desc = title
         city = split_title[-1]
         p_elements = element.find_all('p')
         start_date = ""
@@ -30,10 +32,14 @@ def parse_elements(elements: list):
             start_date = p_elements[1].text
         if len(p_elements) >= 3:
             end_date = p_elements[2].text
+            
+        orgnization = p_elements[0].find('a').text
+            
         items.append({
             'link': link,
             'title': desc,
             'city': city,
+            'orgnization': orgnization,
             'start_date': parse_date(start_date),
             'end_date': parse_date(end_date)
         })
@@ -44,16 +50,12 @@ def read_page(url: str):
     soup = bs4.BeautifulSoup(response.text, 'html.parser')
     return soup
 
-
-def insert_all(items):
-    pass
-
 def fetch_all():
     base_url = 'https://uncareer.net/tag/internship'
     page = 1
     items_all = []
     while True:
-        if page > 50:
+        if page > 1:
             break
         cur_url = f'{base_url}?page={page}'
         print(f'Fetching {cur_url}')
@@ -67,8 +69,9 @@ def fetch_all():
     return items_all
     
 def main():
-    fetch_all()
-    print(parse_date(""))
+    items = fetch_all()
+    for item in items:
+        print(item['title'])
     
 if __name__ == "__main__":
     main()
