@@ -6,6 +6,8 @@ from datetime import datetime
 def parse_date(s: str):
     date_pattern = r"(\d{2}\s\w+\s\d{4})"
     matches = re.findall(date_pattern, s)
+    if len(matches) == 0:
+        return None
     date_string = matches[0]
     date_format = "%d %B %Y"
     date = datetime.strptime(date_string, date_format).date()
@@ -22,6 +24,8 @@ def parse_elements(elements: list):
         desc = ", ".join(split_title[:-1])
         city = split_title[-1]
         p_elements = element.find_all('p')
+        start_date = ""
+        end_date = ""
         if len(p_elements) >= 2:
             start_date = p_elements[1].text
         if len(p_elements) >= 3:
@@ -62,6 +66,7 @@ def fetch_all():
     
 def main():
     fetch_all()
+    print(parse_date(""))
     
 if __name__ == "__main__":
     main()
