@@ -57,6 +57,7 @@ def fetch_all():
             break
         items = parse_elements(elements)
         items_all.extend(items)
+        page += 1
     return items_all
     
 def main():
