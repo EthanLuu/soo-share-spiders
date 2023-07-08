@@ -53,7 +53,7 @@ def fetch_all():
     page = 1
     items_all = []
     while True:
-        if page > 1:
+        if page > 50:
             break
         cur_url = f'{base_url}?page={page}'
         print(f'Fetching {cur_url}')
