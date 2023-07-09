@@ -7,7 +7,7 @@ import logging
 
 class Updater:
     def __init__(self) -> None:
-        self.db = DB('utils', 'un_intern')
+        self.db = DB('utils', 'jobs')
         self.init_log()
         self.update_log_config()
 

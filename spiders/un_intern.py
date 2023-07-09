@@ -35,10 +35,14 @@ def parse_elements(elements: list):
             
         orgnization = p_elements[0].find('a').text
             
+            
+        detail = fetch_detail(link)
+            
         items.append({
             'link': link,
-            'title': desc,
-            'city': city,
+            'title': detail['title'],
+            'city': detail['city'],
+            'country': detail['country'],
             'orgnization': orgnization,
             'start_date': parse_date(start_date),
             'end_date': parse_date(end_date)
@@ -50,12 +54,12 @@ def read_page(url: str):
     soup = bs4.BeautifulSoup(response.text, 'html.parser')
     return soup
 
-def fetch_all():
+def fetch_all(max_page = 50):
     base_url = 'https://uncareer.net/tag/internship'
     page = 1
     items_all = []
     while True:
-        if page > 50:
+        if page > max_page:
             break
         cur_url = f'{base_url}?page={page}'
         print(f'Fetching {cur_url}')
@@ -68,10 +72,25 @@ def fetch_all():
         page += 1
     return items_all
     
+def fetch_detail(url):
+    html = read_page(url)
+    title = html.find("h1").text.strip()
+    list_groups = html.find_all('ul', class_='list-group')
+    group = list_groups[1]
+    group_items = group.find_all('li')
+    country = group_items[2].find("a").text
+    city = group_items[3].find("a").text
+    return {
+        "title": title,
+        "country": country,
+        "city": city
+    }
+
 def main():
-    items = fetch_all()
+    items = fetch_all(max_page = 1)
     for item in items:
-        print(item['title'])
+        print(item['title'], item['country'], item['city'])
+    # print(fetch_detail('https://uncareer.net/vacancy/video-design-intern-595325'))
     
 if __name__ == "__main__":
     main()
