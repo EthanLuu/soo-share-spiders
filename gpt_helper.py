@@ -33,13 +33,12 @@ class Updater:
                     'tags':
                     detail_obj.get('tags', []),  # 如果没有tags字段，返回空列表
                 })
-                print('raw', detail_str)
-                print('gpt', detail_obj)
+                print('gpt:', detail_obj)
             except json.JSONDecodeError as e:
-                print(f'Error decoding JSON for jobId {jobId}: {e}')
+                print(f'Error decoding JSON for {link}: {e}')
                 continue
             except Exception as e:
-                print(f'Error for jobId {jobId}: {e}')
+                print(f'Error for {link}: {e}')
                 continue
 
     def run(self):

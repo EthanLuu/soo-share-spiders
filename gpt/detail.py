@@ -2,9 +2,14 @@ import requests
 import bs4
 import json
 
+proxies = {
+    'http': 'http://127.0.0.1:7890',
+    'https': 'http://127.0.0.1:7890',
+}
+
 
 def read_page(url: str):
-    response = requests.get(url)
+    response = requests.get(url, proxies=proxies)
     soup = bs4.BeautifulSoup(response.text, 'html.parser')
     return soup
 
@@ -20,7 +25,7 @@ def fetch_detail(url):
 
 
 def get_prompt(info):
-    info = 'Give me the result in the form of {"summary": "xxx", tags: ["x", "y", "z"]} 请确保你的回答是中文，并且保证 summary 足够完整，以及提炼的 tags 足够有代表性。Here is the job descrption: ' + info
+    info = 'Give me the result in the form of {"summary": "xxx", tags: ["x", "y", "z"]} 请确保你的回答是中文，并且保证 summary 足够完整并且适当分段，以及提炼的 tags 足够有代表性且不超过6个。岗位描述如下：' + info
 
     return str([{"role": "user", "content": info}])
 
@@ -41,7 +46,7 @@ def parse_gpt_response(response):
 
 
 def main():
-    url = "https://uncareer.net/vacancy/mission-france-stage-assistante-logistique-et-finance-hf-toulouse-602418"
+    url = "https://uncareer.net/vacancy/internship-corporate-performance-analysis-and-reporting-hq-rome-italy-595313"
     info = fetch_detail(url)
     gpt_res = summrize_from_gpt(info)
     print(parse_gpt_response(gpt_res))
