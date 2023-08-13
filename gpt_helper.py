@@ -2,6 +2,7 @@ from db import DB
 from gpt.detail import fetch_detail, GPTHepler
 from config import Config
 import json
+import time
 
 
 class Updater:
@@ -20,6 +21,7 @@ class Updater:
             jobId = job['_id']
             if self.check_exist(jobId):
                 continue
+            time.sleep(30)
             link = job['link']
             try:
                 detail_str = fetch_detail(link)

@@ -1,7 +1,6 @@
 import requests
 import bs4
 import json
-import g4f
 import openai
 
 proxies = {
