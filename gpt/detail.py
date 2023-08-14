@@ -2,6 +2,7 @@ import requests
 import bs4
 import json
 import openai
+import g4f
 
 proxies = {
     'http': 'http://127.0.0.1:7890',
@@ -44,8 +45,11 @@ class GPTHepler:
 
 
     def summrize_from_gpt(self, info):
-        response = openai.ChatCompletion.create(model="gpt-3.5-turbo",
-                                            messages=[self.get_prompt(info)])
+        response = g4f.ChatCompletion.create(model='gpt-3.5-turbo', provider=g4f.Provider.GetGpt, messages=[
+                                     self.get_prompt(info)], stream=False)
+        return json.loads(response)
+        # response = openai.ChatCompletion.create(model="gpt-3.5-turbo",
+        #                                     messages=[self.get_prompt(info)])
         return json.loads(response['choices'][0]['message']['content'])
 
 
