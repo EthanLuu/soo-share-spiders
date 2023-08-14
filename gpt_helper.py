@@ -1,6 +1,8 @@
 from db import DB
-from gpt.detail import fetch_detail, summrize_from_gpt
+from gpt.detail import fetch_detail, GPTHepler
+from config import Config
 import json
+import time
 
 
 class Updater:
@@ -8,6 +10,7 @@ class Updater:
     def __init__(self) -> None:
         self.jobs_db = DB('utils', 'jobs')
         self.details_db = DB('utils', 'details')
+        self.gpt_helper = GPTHepler(Config.open_ai_key)
 
     def check_exist(self, jobId):
         return self.details_db.table.find_one({'jobId': jobId}) is not None
@@ -18,11 +21,11 @@ class Updater:
             jobId = job['_id']
             if self.check_exist(jobId):
                 continue
+            time.sleep(30)
             link = job['link']
             try:
                 detail_str = fetch_detail(link)
-                gpt_response = summrize_from_gpt(detail_str)
-                detail_obj = json.loads(gpt_response)
+                detail_obj = self.gpt_helper.summrize_from_gpt(detail_str)
                 self.details_db.insert_one({
                     'jobId':
                     jobId,
