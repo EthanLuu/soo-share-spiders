@@ -32,9 +32,7 @@ def parse_elements(elements: list):
             start_date = p_elements[1].text
         if len(p_elements) >= 3:
             end_date = p_elements[2].text
-            
         orgnization = p_elements[0].find('a').text
-            
             
         detail = fetch_detail(link)
             
@@ -44,9 +42,11 @@ def parse_elements(elements: list):
             'city': detail['city'],
             'country': detail['country'],
             'orgnization': orgnization,
+            'apply_link': base_url + detail['apply_link'],
             'start_date': parse_date(start_date),
             'end_date': parse_date(end_date)
         })
+    print(items)
     return items
 
 def read_page(url: str):
@@ -59,23 +59,31 @@ def fetch_all(max_page = 50):
     page = 1
     items_all = []
     while True:
-        if page > max_page:
+        try:
+            if page > max_page:
+                break
+            cur_url = f'{base_url}?page={page}'
+            print(f'Fetching {cur_url}')
+            html = read_page(url=cur_url)
+            elements = html.find_all('div', class_='vacancy')
+            if len(elements) == 0:
+                break
+            items = parse_elements(elements)
+            items_all.extend(items)
+            page += 1
+        except Exception as e:
+            print(e)
             break
-        cur_url = f'{base_url}?page={page}'
-        print(f'Fetching {cur_url}')
-        html = read_page(url=cur_url)
-        elements = html.find_all('div', class_='vacancy')
-        if len(elements) == 0:
-            break
-        items = parse_elements(elements)
-        items_all.extend(items)
-        page += 1
     return items_all
     
 def fetch_detail(url):
     html = read_page(url)
     title = html.find("h1").text.strip()
     list_groups = html.find_all('ul', class_='list-group')
+    apply_link_button = html.select_one('.btn.btn-success[target="_blank"]')
+    apply_link = ''
+    if apply_link_button:
+        apply_link = apply_link_button.get('href')
     group = list_groups[1]
     group_items = group.find_all('li')
     country = group_items[2].find("a").text
@@ -83,7 +91,8 @@ def fetch_detail(url):
     return {
         "title": title,
         "country": country,
-        "city": city
+        "city": city,
+        "apply_link": apply_link,
     }
 
 def main():

@@ -44,13 +44,15 @@ class GPTHepler:
         return {"role": "user", "content": info}
 
 
-    def summrize_from_gpt(self, info):
-        response = g4f.ChatCompletion.create(model='gpt-3.5-turbo', provider=g4f.Provider.GetGpt, messages=[
-                                     self.get_prompt(info)], stream=False)
-        return json.loads(response)
-        # response = openai.ChatCompletion.create(model="gpt-3.5-turbo",
-        #                                     messages=[self.get_prompt(info)])
-        return json.loads(response['choices'][0]['message']['content'])
+    def summrize_from_gpt(self, info, method='free'):
+        if method == 'free':
+            response = g4f.ChatCompletion.create(model='gpt-3.5-turbo', provider=g4f.Provider.GetGpt, messages=[
+                                        self.get_prompt(info)], stream=False)
+            return json.loads(response)
+        else:
+            response = openai.ChatCompletion.create(model="gpt-3.5-turbo",
+                                                messages=[self.get_prompt(info)])
+            return json.loads(response['choices'][0]['message']['content'])
 
 
 def main():
