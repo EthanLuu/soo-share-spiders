@@ -30,7 +30,7 @@ def fetch_detail(url: str):
     ad = vacacy_text.find('div', class_='b')
     if ad:
         ad.extract()
-    info = vacacy_text.text.replace("  ", "").replace("\n\n", "").strip()
+    info = vacacy_text.text.strip()
     return info
 
 class GPTHepler:
@@ -39,7 +39,7 @@ class GPTHepler:
         pass
 
     def get_prompt(self, info):
-        info = '请帮助我对英文的岗位描述进行总结和关键词提炼，请保证 summary 足够完整并且适当分段，以及提炼的 tags 足够有代表性且不超过6个，提炼的 tag 应该具有代表性，例如当前岗位的特点。请确保你的 summary 和 tags 里的内容均为中文，并且以如下 JSON 形式回复 {"summary": "xxx", tags: ["x", "y", "z"]} 英文的岗位描述如下：' + info
+        info = '请用中文帮助我对岗位描述进行总结和关键词提炼，请保证 summary 进行适当的分点叙述并确认包括岗位要求和职责以及简单的组织介绍，提炼的 tags 足够有代表性且不超过6个。请确保你回复的文本中的 summay 和 tags 都为中文，且以如下 JSON 形式回复 {"summary": "1. xxx\\n2. xxx\\n", tags: ["x", "y", "z"]} 英文的岗位描述如下：' + info
 
         return {"role": "user", "content": info}
 
