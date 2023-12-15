@@ -24,7 +24,7 @@ class Updater:
             link = job['link']
             try:
                 detail_str = fetch_detail(link)
-                detail_obj = self.gpt_helper.summrize_from_gpt(detail_str, method='free')
+                detail_obj = self.gpt_helper.summrize_from_gpt(detail_str, method='gpt')
                 self.details_db.insert_one({
                     'jobId':
                     jobId,
